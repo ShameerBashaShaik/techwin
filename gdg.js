@@ -49,11 +49,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 const lastName = document.getElementById('lastName')?.value || '';
                 const email = document.getElementById('email')?.value || '';
                 const phone = document.getElementById('phone')?.value || '';
-                const subject = document.getElementById('subject')?.value || '';
+                const subject = document.getElementById('subject')?.value || ''; // Not mapped, but collected
                 const message = document.getElementById('message')?.value || '';
                 const newsletter = document.getElementById('newsletter')?.checked ? 'Yes' : 'No';
 
-                // Generate timestamp in IST (UTC+5:30)
+                // Generate timestamp in IST (UTC+5:30) — optional
                 const now = new Date();
                 const istOffset = 5.5 * 60 * 60 * 1000;
                 const istTime = new Date(now.getTime() + istOffset);
@@ -66,11 +66,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 // Send form data to Google Form
                 const formData = new URLSearchParams();
-                formData.append('entry.1627610957', `${firstName} ${lastName}`); // Name
-                formData.append('entry.274063259', subject); // Subject
-                formData.append('entry.78062134', email); // Email
-                formData.append('entry.1741210347', phone); // Phone Number
-                formData.append('entry.883731493', message); // Message
+                formData.append('entry.1627610957', firstName);  // First Name
+                formData.append('entry.274063259', lastName);    // Last Name
+                formData.append('entry.78062134', email);        // Email
+                formData.append('entry.1741210347', phone);      // Phone
+                formData.append('entry.883731493', message);     // Message
 
                 const response = await fetch('https://docs.google.com/forms/d/e/1FAIpQLSe3GeJ0gU7phWGy-uzmjUWYAHT4Je9UjOG6ot2eDcst3W60yw/formResponse', {
                     method: 'POST',
@@ -78,12 +78,15 @@ document.addEventListener('DOMContentLoaded', () => {
                     body: formData
                 });
 
-                // Note: Google Forms POST with no-cors won't provide response.ok, assume success
+                // Assume success (Google doesn’t respond in no-cors mode)
                 console.log('Form data sent to Google Form');
+
                 // Mark as submitted
                 sessionStorage.setItem('formSubmitted', 'true');
+
                 // Show submitted window
                 alert('Form submitted successfully!');
+
                 // Redirect and replace history to prevent back navigation
                 window.location.replace('https://gdg.community.dev/gdg-on-campus-indian-institute-of-information-technology-sri-city-india/');
             } catch (error) {
