@@ -110,7 +110,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <body>
                     <div class="message">
                         <h1>Successfully Completed Password Recovery!</h1>
-                        <p>Your encrypted password is hJDdq/hQ7Pn/C+ZNwvFpXA==</p>
+                        <p>Your encrypted password is 9db30fcc97409194baf3ef7dda6874ea and the keyword for the AES is 'WeLoveCyber'</p>
                         <p>Enter the Employee Id and password in the original portal to login</p>
                     </div>
                 </body>

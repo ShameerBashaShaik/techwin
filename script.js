@@ -4,7 +4,7 @@ document.querySelector('form').addEventListener('submit', function(event) {
     const password = document.getElementById('password').value;
     const errorSpan = document.querySelector('.error');
 
-    if (username === '20061901' && password === 'Prabhas@MyLove') {
+    if (username === '20061901' && password === 'WeLove@GDGIIITS') {
         window.location.href = 'gdg.html';
     } else {
         errorSpan.textContent = 'Invalid username or password.';
