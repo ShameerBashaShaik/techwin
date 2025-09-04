@@ -49,6 +49,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const lastName = document.getElementById('lastName')?.value || '';
                 const email = document.getElementById('email')?.value || '';
                 const phone = document.getElementById('phone')?.value || '';
+                const room = document.getElementById('room')?.value || '';
                 const subject = document.getElementById('subject')?.value || ''; // Not mapped, but collected
                 const message = document.getElementById('message')?.value || '';
                 const newsletter = document.getElementById('newsletter')?.checked ? 'Yes' : 'No';
@@ -70,6 +71,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 formData.append('entry.274063259', lastName);    // Last Name
                 formData.append('entry.78062134', email);        // Email
                 formData.append('entry.1741210347', phone);      // Phone
+                formData.append('entry.1380830345', room);      // room
                 formData.append('entry.883731493', message);     // Message
 
                 const response = await fetch('https://docs.google.com/forms/d/e/1FAIpQLSe3GeJ0gU7phWGy-uzmjUWYAHT4Je9UjOG6ot2eDcst3W60yw/formResponse', {
