@@ -110,7 +110,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <body>
                     <div class="message">
                         <h1>Successfully Completed Password Recovery!</h1>
-                        <p>Your encrypted password is SiWcqi@IBHMZEXD and the keyword for the AES is 'WeLoveCyber'</p>
+                        <p>Your encrypted password is SiWcqi@IBHMZEXD and the keyword for the Vigenere Cipher is 'WeLoveCyber'</p>
                         <p>Enter the Employee Id and password in the original portal to login</p>
                     </div>
                 </body>
