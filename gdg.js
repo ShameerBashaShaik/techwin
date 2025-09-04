@@ -1,11 +1,10 @@
-// script.js for gdg.html
-
 document.addEventListener('DOMContentLoaded', () => {
-    const allowedReferrer = 'https://techwinsols.onrender.com/index.html'; // Replace with actual domain, e.g., 'https://techwin.com'
-    
+    const baseUrl = 'https://techwinsols.onrender.com'; // Update to your Render URL
+    const allowedReferrer = `${baseUrl}/index.html`;
+
     if (!document.referrer.includes(allowedReferrer)) {
         console.log('Referrer check failed:', document.referrer);
-        document.body.innerHTML = '<h1>Access Denied</h1><p>You must access this page via the Techwin site. In Case You have submitted the form then it got submitted, This is safety procedure to deny multiple requests or claims</p>';
+        document.body.innerHTML = '<h1>Access Denied</h1><p>You must access this page via the Techwin site. This is a safety procedure to deny multiple requests.</p>';
         return;
     }
     console.log('Referrer check passed:', document.referrer);
@@ -32,7 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const form = document.querySelector('.contact-form');
     if (form) {
         console.log('Form found with class .contact-form');
-        form.addEventListener('submit', (e) => {
+        form.addEventListener('submit', async (e) => {
             e.preventDefault();
             console.log('Form submission triggered');
 
@@ -48,75 +47,40 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 // Generate timestamp in IST (UTC+5:30)
                 const now = new Date();
-                const istOffset = 5.5 * 60 * 60 * 1000; // IST offset in milliseconds
+                const istOffset = 5.5 * 60 * 60 * 1000;
                 const istTime = new Date(now.getTime() + istOffset);
                 const timestamp = istTime.toISOString()
                     .replace('T', '_')
                     .replace(/:\d{2}\.\d{3}Z$/, '')
-                    .replace(/:/g, '-'); // Format: YYYY-MM-DD_HH-MM-SS
+                    .replace(/:/g, '-');
 
                 console.log('Collected form data:', { firstName, lastName, email, phone, subject, message, newsletter, timestamp });
 
-                // Get existing submissions from localStorage or initialize empty array
-                let submissions = [];
-                try {
-                    submissions = JSON.parse(localStorage.getItem('submissions')) || [];
-                } catch (error) {
-                    console.error('Error reading from localStorage:', error);
-                }
-
-                // Add new submission with timestamp
-                submissions.push({
-                    firstName,
-                    lastName,
-                    email,
-                    phone,
-                    subject,
-                    message,
-                    newsletter,
-                    timestamp
+                // Send form data to server
+                const response = await fetch(`${baseUrl}/submit`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ firstName, lastName, email, phone, subject, message, newsletter, timestamp })
                 });
 
-                // Save back to localStorage
-                try {
-                    localStorage.setItem('submissions', JSON.stringify(submissions));
-                    console.log('Submissions saved to localStorage:', submissions);
-                } catch (error) {
-                    console.error('Error writing to localStorage:', error);
+                if (response.ok) {
+                    console.log('Form data successfully sent to server');
+                    // Show submitted window
+                    alert('Form submitted successfully!');
+                    // Redirect to prevent multiple submissions
+                    window.location.href = 'https://gdg.community.dev/gdg-on-campus-indian-institute-of-information-technology-sri-city-india/';
+                } else {
+                    console.error('Server error:', response.status, response.statusText);
+                    alert('Failed to save submission. Please try again.');
                 }
-
-                // Generate table-like text for file
-                let fileContent = 'First Name | Last Name | Email | Phone | Subject | Message | Newsletter | Timestamp\n';
-                fileContent += '--------------------------------------------------------------------------------\n';
-                submissions.forEach(sub => {
-                    fileContent += `${sub.firstName} | ${sub.lastName} | ${sub.email} | ${sub.phone} | ${sub.subject} | ${sub.message} | ${sub.newsletter} | ${sub.timestamp}\n`;
-                });
-                console.log('Generated file content:', fileContent);
-
-                // Create Blob and download with timestamped filename
-                try {
-                    const blob = new Blob([fileContent], { type: 'text/plain' });
-                    const url = URL.createObjectURL(blob);
-                    const a = document.createElement('a');
-                    a.href = url;
-                    a.download = `submission_${timestamp}.txt`;
-                    document.body.appendChild(a);
-                    a.click();
-                    document.body.removeChild(a);
-                    URL.revokeObjectURL(url);
-                    console.log(`File download triggered: submission_${timestamp}.txt`);
-                } catch (error) {
-                    console.error('Error creating or downloading file:', error);
-                    alert('Failed to download file. Please try again.');
-                }
-
-                // Reset form after submission
-                form.reset();
-                console.log('Form reset');
             } catch (error) {
                 console.error('Error in form submission:', error);
                 alert('An error occurred. Please try again.');
             }
+
+            // Reset form (optional, after redirect)
+            form.reset();
+            console.log('Form reset');
         });
     } else {
         console.error('Form with class .contact-form not found');
