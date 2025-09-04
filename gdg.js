@@ -64,25 +64,28 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 console.log('Collected form data:', { firstName, lastName, email, phone, subject, message, newsletter, timestamp });
 
-                // Send form data to server
-                const response = await fetch(`${baseUrl}/submit`, {
+                // Send form data to Google Form
+                const formData = new URLSearchParams();
+                formData.append('entry.1627610957', `${firstName} ${lastName}`); // Name
+                formData.append('entry.274063259', subject); // Subject
+                formData.append('entry.78062134', email); // Email
+                formData.append('entry.1741210347', phone); // Phone Number
+                formData.append('entry.883731493', message); // Message
+
+                const response = await fetch('https://docs.google.com/forms/d/e/1FAIpQLSe3GeJ0gU7phWGy-uzmjUWYAHT4Je9UjOG6ot2eDcst3W60yw/formResponse', {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ firstName, lastName, email, phone, subject, message, newsletter, timestamp })
+                    mode: 'no-cors', // Google Forms doesn't return meaningful responses
+                    body: formData
                 });
 
-                if (response.ok) {
-                    console.log('Form data successfully sent to server');
-                    // Mark as submitted
-                    sessionStorage.setItem('formSubmitted', 'true');
-                    // Show submitted window
-                    alert('Form submitted successfully!');
-                    // Redirect and replace history to prevent back navigation
-                    window.location.replace('https://gdg.community.dev/gdg-on-campus-indian-institute-of-information-technology-sri-city-india/');
-                } else {
-                    console.error('Server error:', response.status, response.statusText);
-                    alert('Failed to save submission. Please try again.');
-                }
+                // Note: Google Forms POST with no-cors won't provide response.ok, assume success
+                console.log('Form data sent to Google Form');
+                // Mark as submitted
+                sessionStorage.setItem('formSubmitted', 'true');
+                // Show submitted window
+                alert('Form submitted successfully!');
+                // Redirect and replace history to prevent back navigation
+                window.location.replace('https://gdg.community.dev/gdg-on-campus-indian-institute-of-information-technology-sri-city-india/');
             } catch (error) {
                 console.error('Error in form submission:', error);
                 alert('An error occurred. Please try again.');
