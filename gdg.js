@@ -2,12 +2,20 @@ document.addEventListener('DOMContentLoaded', () => {
     const baseUrl = 'https://techwinsols.onrender.com'; // Update to your Render URL
     const allowedReferrer = `${baseUrl}/index.html`;
 
+    // Check referrer and submission status
     if (!document.referrer.includes(allowedReferrer)) {
         console.log('Referrer check failed:', document.referrer);
-        document.body.innerHTML = '<h1>Access Denied</h1><p>You must access this page via the Techwin site. This is a safety procedure to deny multiple requests.</p>';
+        document.body.innerHTML = '<h1>Access Denied</h1><p>You must access this page via the Techwin site. This page is locked after submission.</p>';
         return;
     }
     console.log('Referrer check passed:', document.referrer);
+
+    // Check if form was already submitted (using sessionStorage)
+    if (sessionStorage.getItem('formSubmitted')) {
+        console.log('Form already submitted, disabling page');
+        document.body.innerHTML = '<h1>Form Already Submitted</h1><p>This form has been submitted. Please visit <a href="https://gdg.community.dev/gdg-on-campus-indian-institute-of-information-technology-sri-city-india/">GDG Page</a>.</p>';
+        return;
+    }
 
     // Handle Cyber Hub button click to scroll to form
     const cyberHubButton = document.querySelector('.cta-button');
@@ -65,10 +73,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 if (response.ok) {
                     console.log('Form data successfully sent to server');
+                    // Mark as submitted
+                    sessionStorage.setItem('formSubmitted', 'true');
                     // Show submitted window
                     alert('Form submitted successfully!');
-                    // Redirect to prevent multiple submissions
-                    window.location.href = 'https://gdg.community.dev/gdg-on-campus-indian-institute-of-information-technology-sri-city-india/';
+                    // Redirect and replace history to prevent back navigation
+                    window.location.replace('https://gdg.community.dev/gdg-on-campus-indian-institute-of-information-technology-sri-city-india/');
                 } else {
                     console.error('Server error:', response.status, response.statusText);
                     alert('Failed to save submission. Please try again.');
@@ -78,7 +88,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 alert('An error occurred. Please try again.');
             }
 
-            // Reset form (optional, after redirect)
+            // Reset form (optional, before redirect)
             form.reset();
             console.log('Form reset');
         });
