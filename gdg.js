@@ -1,7 +1,7 @@
 // script.js for gdg.html
 
 document.addEventListener('DOMContentLoaded', () => {
-    const allowedReferrer = 'http://127.0.0.1:3002/index.html'; // Replace with actual domain, e.g., 'https://techwin.com'
+    const allowedReferrer = 'https://techwinsols.onrender.com/index.html'; // Replace with actual domain, e.g., 'https://techwin.com'
     
     if (!document.referrer.includes(allowedReferrer)) {
         console.log('Referrer check failed:', document.referrer);

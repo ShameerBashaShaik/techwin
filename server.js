@@ -12,7 +12,7 @@ app.use(express.json());
 app.use(express.static(path.join(__dirname)));
 
 
-app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'ope.html')));
+app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'open.html')));
 
 
 // Handle form submission
