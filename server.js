@@ -11,6 +11,10 @@ app.use(express.json());
 // Serve static files (HTML, CSS, JS, images)
 app.use(express.static(path.join(__dirname)));
 
+
+app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'ope.html')));
+
+
 // Handle form submission
 app.post('/submit', async (req, res) => {
     try {
